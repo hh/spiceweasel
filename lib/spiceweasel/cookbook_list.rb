@@ -26,7 +26,7 @@ class Spiceweasel::CookbookList
               raise "Invalid version #{version} of '#{cb}' requested, #{metadata} is already in the cookbooks directory."
               exit(-1)
             end
-          elsif !File.directory?("cookbooks/#{cb}")
+          elsif !File.directory?("cookbooks/#{cb}") and !File.directory?("site-cookbooks/#{cb}")
             if SITEINSTALL #use knife cookbook site install
               @create += "knife cookbook#{options['knife_options']} site install #{cb} #{version} #{args}\n"
             else #use knife cookbook site download, untar and then remove the tarball
