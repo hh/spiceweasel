@@ -19,6 +19,13 @@ class Spiceweasel::CookbookList
               raise "Invalid version #{version} of '#{cb}' requested, #{metadata} is already in the cookbooks directory."
               exit(-1)
             end
+          elsif version and File.directory?("site-cookbooks/#{cb}")
+            #check metadata.rb for requested version
+            metadata = File.open("site-cookbooks/#{cb}/metadata.rb").grep(/^version/)[0].split()[1].gsub(/"/,'').to_s
+            if (metadata != version)
+              raise "Invalid version #{version} of '#{cb}' requested, #{metadata} is already in the cookbooks directory."
+              exit(-1)
+            end
           elsif !File.directory?("cookbooks/#{cb}")
             if SITEINSTALL #use knife cookbook site install
               @create += "knife cookbook#{options['knife_options']} site install #{cb} #{version} #{args}\n"
